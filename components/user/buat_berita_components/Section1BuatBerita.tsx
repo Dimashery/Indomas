@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 
 interface FormData {
   namaAcara: string;
-  bidangKajian: string;
   lokasiAcara: string;
   tanggalAcara: string;
   deskripsiAcara: string;
@@ -16,7 +15,6 @@ const Section1BuatBerita: React.FC = () => {
   const [animateForm, setAnimateForm] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     namaAcara: "",
-    bidangKajian: "",
     lokasiAcara: "",
     tanggalAcara: "",
     deskripsiAcara: "",
@@ -91,7 +89,6 @@ const Section1BuatBerita: React.FC = () => {
     // Validate all required fields
     if (
       !formData.namaAcara ||
-      !formData.bidangKajian ||
       !formData.lokasiAcara ||
       !formData.tanggalAcara ||
       !formData.deskripsiAcara ||
@@ -243,33 +240,6 @@ const Section1BuatBerita: React.FC = () => {
                   value={formData.namaAcara}
                   onChange={handleInputChange}
                   placeholder="Masukkan Nama Acara"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 hover:border-gray-400 placeholder-gray-400 text-gray-800"
-                  required
-                />
-              </div>
-
-              {/* Bidang Kajian */}
-              <div
-                className={`transition-all duration-700 ${
-                  animateForm
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-                style={{ transitionDelay: "300ms" }}
-              >
-                <label
-                  htmlFor="bidangKajian"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Bidang Kajian
-                </label>
-                <input
-                  type="text"
-                  id="bidangKajian"
-                  name="bidangKajian"
-                  value={formData.bidangKajian}
-                  onChange={handleInputChange}
-                  placeholder="Masukkan Bidang Kajian"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 hover:border-gray-400 placeholder-gray-400 text-gray-800"
                   required
                 />

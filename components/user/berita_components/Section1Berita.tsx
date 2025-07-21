@@ -29,17 +29,18 @@ const Section1Berita: React.FC = () => {
   // Data dummy - dalam implementasi nyata, data ini bisa dari props atau API
   const beritaData: BeritaData = {
     title: "Pembuatan Batik Di Desa Bumiaji",
-    date: "12 Juli 2025 18:25",
+    date: "12 Juli 2025",
     author: {
-      name: "Muhammad_Imam",
+      name: "Kebersaman Social" /* ini akan get ke data profile organisasi*/,
       location: "Jl. Kasiman No.1, Malang Raya",
     },
     content: `Indomas merupakan sebuah website yang memberikan informasi terkait kegiatan organisasi yang terdaftar pada Badan Kesatuan Bangsa dan Politik. Indomas merupakan sebuah website yang memberikan informasi terkait kegiatan organisasi yang terdaftar pada Badan Kesatuan Bangsa dan Politik. Indomas merupakan sebuah website yang memberikan informasi terkait kegiatan organisasi yang terdaftar pada Badan Kesatuan Bangsa dan Politik. Indomas merupakan sebuah website yang memberikan informasi terkait kegiatan organisasi yang terdaftar pada Badan Kesatuan Bangsa dan Politik.`,
     image: "/berita/Berita3.png",
     organization: {
-      name: "Kebersaman Sosial",
-      type: "Sosial",
-      email: "kebersaman.sosial@gmail.com",
+      name: "Kebersaman Sosial" /* ini akan get ke data profile organisasi*/,
+      type: "Sosial" /* ini akan get ke data profile organisasi*/,
+      email:
+        "kebersaman.sosial@gmail.com" /* ini akan get ke data profile organisasi*/,
     },
   };
 
@@ -109,7 +110,7 @@ const Section1Berita: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full overflow-hidden bg-white-500 flex items-center justify-center">
               <Image
-                src="/logos/KESBANG.png"
+                src="/logos/KESBANG.png" /* ini akan get ke data profile organisasi*/
                 alt="Organization Logo"
                 width={64}
                 height={64}

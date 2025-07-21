@@ -5,33 +5,40 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+// Mendefinisikan antarmuka untuk data organisasi
+interface Organization {
+  name: string;
+  type: string;
+  email: string;
+}
+
+// Mendefinisikan antarmuka untuk data author
+interface Author {
+  name: string;
+  location: string;
+}
+
 // Mendefinisikan antarmuka untuk properti kartu berita
 interface NewsCardProps {
   id: string | number;
-  organization: string;
-  location: string;
   title: string;
   date: string;
-  description: string;
-  imageUrl: string;
+  author: Author;
+  content: string;
+  image: string;
+  organization: Organization;
   index: number;
-  category: string;
-  author: string;
-  authorRole: string;
-  authorAvatar: string;
 }
 
 // Komponen untuk satu kartu berita
 const NewsCard: React.FC<NewsCardProps> = ({
   title,
   date,
-  description,
-  imageUrl,
-  index,
-  category,
   author,
-  authorRole,
-  authorAvatar,
+  content,
+  image,
+  organization,
+  index,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -72,7 +79,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
       {/* Gambar berita */}
       <div className="relative w-full h-48 overflow-hidden">
         <Image
-          src={imageUrl}
+          src={image}
           alt={title}
           fill
           style={{ objectFit: "cover" }}
@@ -88,7 +95,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
         {/* Kategori dan tanggal */}
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">
-            {category}
+            {organization.type}
           </span>
           <span className="text-xs text-gray-500">{date}</span>
         </div>
@@ -100,7 +107,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
 
         {/* Deskripsi dengan selengkapnya */}
         <div className="text-gray-600 text-sm flex-grow mb-4">
-          <p className="line-clamp-3 mb-2">{description}</p>
+          <p className="line-clamp-3 mb-2">{content}</p>
           <Link
             href="/berita"
             className="text-green-600 hover:text-green-800 text-sm font-medium transition-colors duration-200 hover:underline"
@@ -109,21 +116,18 @@ const NewsCard: React.FC<NewsCardProps> = ({
           </Link>
         </div>
 
-        {/* Author info */}
+        {/* Organization info */}
         <div className="flex items-center mt-auto pt-4 border-t border-gray-100">
           <div className="relative w-8 h-8 mr-3 flex-shrink-0">
-            <Image
-              src={authorAvatar}
-              alt={author}
-              fill
-              style={{ objectFit: "cover" }}
-              className="rounded-full"
-              sizes="32px"
-            />
+            <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+              <span className="text-white text-xs font-semibold">
+                {organization.name.charAt(0)}
+              </span>
+            </div>
           </div>
           <div className="text-sm">
-            <p className="font-medium text-gray-900">{author}</p>
-            <p className="text-xs text-gray-500">{authorRole}</p>
+            <p className="font-medium text-gray-900">{organization.name}</p>
+            <p className="text-xs text-gray-500">{author.location}</p>
           </div>
         </div>
       </div>
@@ -287,93 +291,114 @@ const Section2Home: React.FC = () => {
     setTimeout(() => setIsPaused(false), 500);
   };
 
-  // Data dummy untuk kartu berita
+  // Data dummy untuk kartu berita - disesuaikan dengan struktur baru
   const newsData = [
     {
       id: "1",
-      organization: "PMM UMM",
-      location: "A. Rahman No.1, Malang Raya",
       title: "Pembuatan Batik Di Desa Bumiaji",
       date: "12 Juli 2025",
-      description:
+      author: {
+        name: "Kebersaman Social",
+        location: "Jl. Kasiman No.1, Malang Raya",
+      },
+      content:
         "Indomas merupakan sebuah website yang memberikan informasi terkait kegiatan organisasi yang terdaftar pada Badan Kesatuan Bangsa dan Politik. Website ini menyediakan platform untuk berbagai organisasi masyarakat untuk berbagi informasi kegiatan dan program mereka.",
-      imageUrl: "/berita/Berita1.png",
-      category: "Kebudayaan",
-      author: "Ahmad Fauzi",
-      authorRole: "Koordinator PMM",
-      authorAvatar: "/logos/KESBANG.png",
+      image: "/berita/Berita1.png",
+      organization: {
+        name: "Kebersaman Sosial",
+        type: "Sosial",
+        email: "kebersaman.sosial@gmail.com",
+      },
     },
     {
       id: "2",
-      organization: "PMM UMM",
-      location: "A. Rahman No.1, Malang Raya",
-      title: "Workshop Pengembangan UMKM Digital",
-      date: "10 Juli 2025",
-      description:
-        "Program pelatihan komprehensif untuk mengembangkan usaha mikro, kecil, dan menengah melalui platform digital. Kegiatan ini bertujuan untuk meningkatkan literasi digital para pelaku UMKM di wilayah Batu dan sekitarnya.",
-      imageUrl: "/berita/Berita1.png",
-      category: "Ekonomi",
-      author: "Siti Nurhaliza",
-      authorRole: "Fasilitator UMKM",
-      authorAvatar: "/logos/KESBANG.png",
+      title: "Program Bantuan Sosial untuk Masyarakat",
+      date: "15 Juli 2025",
+      author: {
+        name: "Yayasan Peduli Sesama",
+        location: "Jl. Soekarno Hatta No.5, Malang",
+      },
+      content:
+        "Program bantuan sosial yang dilakukan oleh yayasan untuk membantu masyarakat kurang mampu dengan memberikan bantuan sembako dan pelatihan keterampilan.",
+      image: "/berita/Berita2.png",
+      organization: {
+        name: "Yayasan Peduli Sesama",
+        type: "Sosial",
+        email: "peduli.sesama@gmail.com",
+      },
     },
     {
       id: "3",
-      organization: "PMM UMM",
-      location: "A. Rahman No.1, Malang Raya",
-      title: "Pelatihan Pertanian Organik Berkelanjutan",
-      date: "8 Juli 2025",
-      description:
-        "Memberikan edukasi tentang metode pertanian organik yang ramah lingkungan kepada petani lokal. Program ini mencakup teknik budidaya, pengelolaan pupuk organik, dan strategi pemasaran produk organik.",
-      imageUrl: "/berita/Berita1.png",
-      category: "Pertanian",
-      author: "Budi Santoso",
-      authorRole: "Ahli Pertanian",
-      authorAvatar: "/logos/KESBANG.png",
+      title: "Festival Budaya Nusantara 2025",
+      date: "18 Juli 2025",
+      author: {
+        name: "Komunitas Budaya Batu",
+        location: "Jl. Brantas No.10, Batu",
+      },
+      content:
+        "Festival budaya tahunan yang menampilkan berbagai kesenian tradisional dari seluruh Nusantara dengan partisipasi dari berbagai komunitas budaya.",
+      image: "/berita/Berita3.png",
+      organization: {
+        name: "Komunitas Budaya Batu",
+        type: "Kebudayaan",
+        email: "budaya.batu@gmail.com",
+      },
     },
     {
       id: "4",
-      organization: "PMM UMM",
-      location: "A. Rahman No.1, Malang Raya",
-      title: "Seminar Kesehatan Masyarakat",
-      date: "6 Juli 2025",
-      description:
-        "Kegiatan penyuluhan kesehatan untuk meningkatkan kesadaran masyarakat tentang pola hidup sehat. Seminar ini menghadirkan tenaga medis profesional dan membahas berbagai topik kesehatan terkini.",
-      imageUrl: "/berita/Berita1.png",
-      category: "Kesehatan",
-      author: "Dr. Maya Sari",
-      authorRole: "Dokter Komunitas",
-      authorAvatar: "/logos/KESBANG.png",
+      title: "Gerakan Lingkungan Hidup Bersih",
+      date: "20 Juli 2025",
+      author: {
+        name: "Green Earth Foundation",
+        location: "Jl. Dieng No.20, Malang",
+      },
+      content:
+        "Kampanye kesadaran lingkungan dengan mengadakan kegiatan bersih-bersih sungai dan penanaman pohon di berbagai titik kota Batu.",
+      image: "/berita/Berita1.png",
+      organization: {
+        name: "Green Earth Foundation",
+        type: "Lingkungan",
+        email: "green.earth@gmail.com",
+      },
     },
     {
       id: "5",
-      organization: "PMM UMM",
-      location: "A. Rahman No.1, Malang Raya",
-      title: "Program Literasi Digital untuk Lansia",
-      date: "4 Juli 2025",
-      description:
-        "Inisiatif untuk meningkatkan kemampuan digital lansia agar dapat mengakses informasi dan berkomunikasi dengan lebih baik di era digital. Program ini meliputi pelatihan penggunaan smartphone dan media sosial.",
-      imageUrl: "/berita/Berita1.png",
-      category: "Teknologi",
-      author: "Rina Kartika",
-      authorRole: "Instruktur Digital",
-      authorAvatar: "/logos/KESBANG.png",
+      title: "Gerakan Lingkungan Hidup Bersih",
+      date: "20 Juli 2025",
+      author: {
+        name: "Green Earth Foundation",
+        location: "Jl. Dieng No.20, Malang",
+      },
+      content:
+        "Kampanye kesadaran lingkungan dengan mengadakan kegiatan bersih-bersih sungai dan penanaman pohon di berbagai titik kota Batu.",
+      image: "/berita/Berita1.png",
+      organization: {
+        name: "Green Earth Foundation",
+        type: "Lingkungan",
+        email: "green.earth@gmail.com",
+      },
     },
     {
       id: "6",
-      organization: "PMM UMM",
-      location: "A. Rahman No.1, Malang Raya",
-      title: "Festival Seni Budaya Lokal",
-      date: "2 Juli 2025",
-      description:
-        "Perayaan kekayaan seni dan budaya lokal melalui berbagai pertunjukan, pameran, dan workshop. Festival ini bertujuan untuk melestarikan dan mempromosikan warisan budaya daerah kepada generasi muda.",
-      imageUrl: "/berita/Berita1.png",
-      category: "Seni",
-      author: "Denny Prakoso",
-      authorRole: "Seniman Lokal",
-      authorAvatar: "/logos/KESBANG.png",
+      title: "Gerakan Lingkungan Hidup Bersih",
+      date: "20 Juli 2025",
+      author: {
+        name: "Green Earth Foundation",
+        location: "Jl. Dieng No.20, Malang",
+      },
+      content:
+        "Kampanye kesadaran lingkungan dengan mengadakan kegiatan bersih-bersih sungai dan penanaman pohon di berbagai titik kota Batu.",
+      image: "/berita/Berita1.png",
+      organization: {
+        name: "Green Earth Foundation",
+        type: "Lingkungan",
+        email: "green.earth@gmail.com",
+      },
     },
   ];
+
+  // Tentukan apakah perlu menggunakan infinite scroll
+  const shouldUseInfiniteScroll = newsData.length > 3;
 
   return (
     <section className="py-16 bg-gray-50">
@@ -393,63 +418,92 @@ const Section2Home: React.FC = () => {
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Sekumpulan Berita Terkini dari Organisasi Masyarakat kota Batu
           </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Geser untuk melihat berita lainnya
-          </p>
+          {shouldUseInfiniteScroll && (
+            <p className="text-sm text-gray-500 mt-2">
+              Geser untuk melihat berita lainnya
+            </p>
+          )}
         </div>
 
-        {/* Infinite Scroll Layout with Drag Support */}
-        <div
-          ref={scrollContainerRef}
-          className="relative overflow-hidden mb-12 cursor-grab active:cursor-grabbing"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* Gradient fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 lg:w-16 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 lg:w-16 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none" />
-
+        {/* Infinite Scroll Layout with Drag Support atau Static Grid Layout */}
+        {shouldUseInfiniteScroll ? (
+          // Layout untuk data banyak (infinite scroll)
           <div
-            className={`flex gap-4 sm:gap-6 transition-transform duration-200 ease-out ${
-              isPaused ? "" : "animate-scroll"
-            }`}
-            style={{
-              transform: `translateX(${manualOffset}px)`,
-              width: `calc(${cardWidth}px * 12 + 24px * 11)`,
-            }}
-            onMouseEnter={() => !isDragging && setIsPaused(true)}
-            onMouseLeave={() => !isDragging && setIsPaused(false)}
+            ref={scrollContainerRef}
+            className="relative overflow-hidden mb-12 cursor-grab active:cursor-grabbing"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
-            {/* Duplikasi data untuk infinite scroll */}
-            {[...newsData, ...newsData].map((news, index) => (
-              <div
-                key={`${news.id}-${index}`}
-                className="flex-shrink-0"
-                style={{ width: `${cardWidth}px` }}
-              >
-                <NewsCard
-                  id={news.id}
-                  organization={news.organization}
-                  location={news.location}
-                  title={news.title}
-                  date={news.date}
-                  description={news.description}
-                  imageUrl={news.imageUrl}
-                  index={index}
-                  category={news.category}
-                  author={news.author}
-                  authorRole={news.authorRole}
-                  authorAvatar={news.authorAvatar}
-                />
-              </div>
-            ))}
+            {/* Gradient fade edges */}
+            <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 lg:w-16 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 lg:w-16 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none" />
+
+            <div
+              className={`flex gap-4 sm:gap-6 transition-transform duration-200 ease-out ${
+                isPaused ? "" : "animate-scroll"
+              }`}
+              style={{
+                transform: `translateX(${manualOffset}px)`,
+                width: `calc(${cardWidth}px * 12 + 24px * 11)`,
+              }}
+              onMouseEnter={() => !isDragging && setIsPaused(true)}
+              onMouseLeave={() => !isDragging && setIsPaused(false)}
+            >
+              {/* Duplikasi data untuk infinite scroll */}
+              {[...newsData, ...newsData].map((news, index) => (
+                <div
+                  key={`${news.id}-${index}`}
+                  className="flex-shrink-0"
+                  style={{ width: `${cardWidth}px` }}
+                >
+                  <NewsCard
+                    id={news.id}
+                    title={news.title}
+                    date={news.date}
+                    author={news.author}
+                    content={news.content}
+                    image={news.image}
+                    organization={news.organization}
+                    index={index}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          // Layout untuk data sedikit (static grid di tengah)
+          <div className="mb-12">
+            <div
+              className={`grid gap-4 sm:gap-6 justify-center ${
+                newsData.length === 1
+                  ? "grid-cols-1 max-w-sm mx-auto"
+                  : newsData.length === 2
+                  ? "grid-cols-1 md:grid-cols-2 max-w-2xl mx-auto"
+                  : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto"
+              }`}
+            >
+              {newsData.map((news, index) => (
+                <div key={news.id} className="w-full max-w-sm mx-auto">
+                  <NewsCard
+                    id={news.id}
+                    title={news.title}
+                    date={news.date}
+                    author={news.author}
+                    content={news.content}
+                    image={news.image}
+                    organization={news.organization}
+                    index={index}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Tombol Buat Kegiatan */}
         <div

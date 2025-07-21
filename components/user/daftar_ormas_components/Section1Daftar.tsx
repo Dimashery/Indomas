@@ -696,15 +696,22 @@ const Section1Daftar: React.FC = () => {
                     3. Dokumen harus berisi tanda tangan dan stempel Organisasi
                     dan Kepala
                   </div>
+                  <div>4. Anda dapat mengakses tempalate File Pendukung</div>
+                  <div>
+                    5. Lalu unggah berkas dalam bentuk PDF dengan syarat
+                    ketentuan dibawah ini
+                  </div>
                 </div>
 
-                {/* Section Template File
-                <p className="text-sm text-gray-600 mb-4">
-                  Berikut untuk Template pendukungnya : {"Template.docx"}
-                </p> */}
+                <div className="text-gray-950">
+                  <p className="font-semibold">Template File Pendukung *</p>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Berikut untuk Template pendukungnya : {"Template.docx"}
+                  </p>
+                </div>
 
                 <p className="text-xs text-gray-500 mb-4">
-                  Upload max 10 MB format PDF
+                  Upload Max 2 MB format PDF
                 </p>
 
                 <fieldset
