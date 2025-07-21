@@ -11,6 +11,7 @@ import {
   Building2,
   ImageIcon,
 } from "lucide-react";
+import Image from "next/image";
 
 interface OrganisasiData {
   id: string;
@@ -147,9 +148,11 @@ const Section1DetailDataOrganisasi = ({
               {/* Avatar */}
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white bg-opacity-20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white border-opacity-30 shadow-lg overflow-hidden">
                 {organisasiData.avatar ? (
-                  <img
+                  <Image
                     src={organisasiData.avatar}
                     alt={`Avatar ${organisasiData.nama}`}
+                    width={96}
+                    height={96}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       // Fallback jika gambar gagal dimuat

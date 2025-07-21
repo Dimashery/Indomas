@@ -2,6 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { IoMdArrowDropright } from "react-icons/io";
+import { IoMdArrowDropleft } from "react-icons/io";
+import { IoMdArrowRoundBack } from "react-icons/io";
+
 
 interface AnggotaData {
   id: number;
@@ -66,6 +71,7 @@ const Section2DetailDataOrganisasi = ({ id }: Section2DetailDataOrganisasiProps)
       setAnggotaData(mockAnggotaData);
       setLoading(false);
     }, 1000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
@@ -244,9 +250,7 @@ const Section2DetailDataOrganisasi = ({ id }: Section2DetailDataOrganisasiProps)
                   disabled={currentPage === 1}
                   className="p-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
+                   <IoMdArrowDropleft className="w-5 h-5" />
                 </button>
 
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -281,9 +285,7 @@ const Section2DetailDataOrganisasi = ({ id }: Section2DetailDataOrganisasiProps)
                   disabled={currentPage === totalPages}
                   className="p-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <IoMdArrowDropright className="w-5 h-5" />
                   </button>
               </div>
             </div>
@@ -294,9 +296,7 @@ const Section2DetailDataOrganisasi = ({ id }: Section2DetailDataOrganisasiProps)
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mt-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+              <IoDocumentTextOutline className="w-5 h-5 text-green-600"/>
             </div>
             <div>
               <h3 className="font-semibold text-slate-900">Dokumen Pendukung</h3>
@@ -310,12 +310,11 @@ const Section2DetailDataOrganisasi = ({ id }: Section2DetailDataOrganisasiProps)
         {/* Back Button */}
         <div className="mt-8 flex justify-end">
           <Link 
-            href="/data-organisasi" 
+            href="/data-organisasi-admin" 
             className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
+            <IoMdArrowRoundBack className="w-5 h-5"/>
+
             Kembali
           </Link>
         </div>
