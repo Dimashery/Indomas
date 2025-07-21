@@ -275,7 +275,7 @@ const Footer = () => {
               <h4 className="text-xl font-semibold text-white">Menu Utama</h4>
               <nav className="space-y-3">
                 {[
-                  { name: "Beranda", href: "/home" },
+                  { name: "Home", href: "/home" },
                   { name: "List Ormas", href: "/list-ormas" },
                   {
                     name: "Panduan",

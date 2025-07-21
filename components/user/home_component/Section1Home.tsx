@@ -35,7 +35,7 @@ const Section1Home = () => {
   return (
     <div className="relative w-full h-screen min-h-[600px]">
       <Image
-        src="/bg_form.png"
+        src="/kota-batu.jpg"
         alt="Dashboard Background"
         layout="fill"
         objectFit="cover"
