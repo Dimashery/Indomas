@@ -737,7 +737,7 @@ const Section2Profile: React.FC = () => {
                         <Upload className="mx-auto mb-2" size={24} />
                         {!isEditing
                           ? "File PDF belum diunggah"
-                          : "Pilih file PDF (max 10MB)"}
+                          : "Pilih file PDF (max 5MB)"}
                       </div>
                     )}
                     {isEditing && (
@@ -768,7 +768,7 @@ const Section2Profile: React.FC = () => {
                         • Dokumen harus berisi tanda tangan dan stempel
                         organisasi
                       </li>
-                      <li>• Ukuran file maksimum 10 MB</li>
+                      <li>• Ukuran file maksimum 5 MB</li>
                     </ul>
                   </div>
                 </div>

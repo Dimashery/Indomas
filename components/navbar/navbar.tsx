@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -39,6 +40,23 @@ const Navbar = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMobileMenuOpen, isClient]);
 
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    if (!isClient) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isProfileDropdownOpen &&
+        !(event.target as Element)?.closest(".profile-dropdown-container")
+      ) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [isProfileDropdownOpen, isClient]);
+
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (!isClient) return;
@@ -55,6 +73,10 @@ const Navbar = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
   // Menu items configuration
@@ -134,14 +156,108 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/auth/login"
-              className={`text-green-600 hover:text-green-700 bg-white hover:bg-gray-100 rounded-xl transition-all duration-300 ${
-                isScrolled ? "px-3 py-1.5 text-sm" : "px-4 py-2 text-base"
-              }`}
-            >
-              Masuk
-            </Link>
+
+            {/* Avatar Profile with Dropdown */}
+            <div className="relative profile-dropdown-container">
+              <button
+                onClick={toggleProfileDropdown}
+                className={`flex items-center space-x-2 hover:bg-green-700 rounded-xl transition-all duration-300 ${
+                  isScrolled ? "p-1.5" : "p-2"
+                }`}
+              >
+                <div
+                  className={`bg-white rounded-full flex items-center justify-center font-bold text-green-600 transition-all duration-300 ${
+                    isScrolled ? "w-8 h-8 text-sm" : "w-10 h-10 text-base"
+                  }`}
+                >
+                  JD
+                </div>
+                <svg
+                  className={`text-white transition-all duration-300 ${
+                    isScrolled ? "w-4 h-4" : "w-5 h-5"
+                  } ${isProfileDropdownOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {/* Dropdown Menu */}
+              <div
+                className={`absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transform transition-all duration-300 ease-out ${
+                  isProfileDropdownOpen
+                    ? "opacity-100 scale-100 translate-y-0"
+                    : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                }`}
+                style={{
+                  transformOrigin: "top right",
+                }}
+              >
+                {/* Status Section */}
+                <div className="px-4 py-3 bg-gray-50 border-b border-gray-100">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-medium text-gray-700">
+                      Status: Aktif
+                    </span>
+                  </div>
+                </div>
+
+                {/* Menu Items */}
+                <div className="py-2">
+                  <Link
+                    href="/profile"
+                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-all duration-200 group"
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  >
+                    <svg
+                      className="w-5 h-5 mr-3 text-gray-400 group-hover:text-green-500 transition-colors duration-200"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                    <span className="font-medium">Profile Saya</span>
+                  </Link>
+
+                  <button
+                    className="w-full flex items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
+                    onClick={() => {
+                      setIsProfileDropdownOpen(false);
+                      // Logout logic akan ditambahkan nanti
+                    }}
+                  >
+                    <svg
+                      className="w-5 h-5 mr-3 text-gray-400 group-hover:text-red-500 transition-colors duration-200"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    <span className="font-medium">Keluar Akun</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -205,6 +321,8 @@ const Navbar = () => {
                   </Link>
                 </div>
               ))}
+
+              {/* Mobile Avatar Profile */}
               <div
                 className={`transform transition-all duration-300 ease-in-out ${
                   isMobileMenuOpen
@@ -217,15 +335,73 @@ const Navbar = () => {
                     : "0ms",
                 }}
               >
-                <Link
-                  href="/auth/login"
-                  className={`block text-green-600 hover:text-green-700 bg-white hover:bg-gray-100 rounded-xl transition-all duration-300 font-bold text-center transform hover:scale-105 ${
-                    isScrolled ? "px-3 py-1.5 text-sm" : "px-4 py-2 text-base"
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Masuk
-                </Link>
+                <div className="bg-white rounded-xl p-4 space-y-3">
+                  {/* Avatar Header */}
+                  <div className="flex items-center space-x-3">
+                    <div
+                      className={`bg-green-600 text-white rounded-full flex items-center justify-center font-bold ${
+                        isScrolled ? "w-10 h-10 text-base" : "w-12 h-12 text-lg"
+                      }`}
+                    >
+                      JD
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium text-gray-700">
+                          Status: Aktif
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Profile Links */}
+                  <div className="space-y-2 pt-2 border-t border-gray-100">
+                    <Link
+                      href="/profile"
+                      className="flex items-center p-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition-all duration-200"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <svg
+                        className="w-5 h-5 mr-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                      <span className="font-medium">Profile Saya</span>
+                    </Link>
+
+                    <button
+                      className="w-full flex items-center p-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        // Logout logic akan ditambahkan nanti
+                      }}
+                    >
+                      <svg
+                        className="w-5 h-5 mr-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        />
+                      </svg>
+                      <span className="font-medium">Keluar Akun</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
