@@ -2,6 +2,9 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { MdLogout } from "react-icons/md";
+import { FaRegUser } from "react-icons/fa";
+import { IoIosArrowDown } from "react-icons/io";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -172,21 +175,11 @@ const Navbar = () => {
                 >
                   JD
                 </div>
-                <svg
+                <IoIosArrowDown
                   className={`text-white transition-all duration-300 ${
                     isScrolled ? "w-4 h-4" : "w-5 h-5"
                   } ${isProfileDropdownOpen ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                />
               </button>
 
               {/* Dropdown Menu */}
@@ -217,19 +210,7 @@ const Navbar = () => {
                     className="flex items-center px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-all duration-200 group"
                     onClick={() => setIsProfileDropdownOpen(false)}
                   >
-                    <svg
-                      className="w-5 h-5 mr-3 text-gray-400 group-hover:text-green-500 transition-colors duration-200"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                      />
-                    </svg>
+                    <FaRegUser className="w-5 h-5 mr-3 text-gray-400 group-hover:text-green-500 transition-colors duration-200"/>
                     <span className="font-medium">Profile Saya</span>
                   </Link>
 
@@ -240,19 +221,7 @@ const Navbar = () => {
                       // Logout logic akan ditambahkan nanti
                     }}
                   >
-                    <svg
-                      className="w-5 h-5 mr-3 text-gray-400 group-hover:text-red-500 transition-colors duration-200"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      />
-                    </svg>
+                    <MdLogout className="w-5 h-5 mr-3 text-gray-400 group-hover:text-red-500 transition-colors duration-200"/>
                     <span className="font-medium">Keluar Akun</span>
                   </button>
                 </div>
@@ -288,14 +257,15 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu - Enhanced with smooth animations */}
+        {/* Mobile Menu - Enhanced with better max-height and spacing */}
         {isClient && (
           <div
             className={`lg:hidden mobile-menu-container overflow-hidden transition-all duration-500 ease-in-out ${
-              isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
             }`}
           >
-            <div className="bg-green-600 rounded-b-2xl shadow-lg mt-3 py-4 px-4 sm:px-6 space-y-3">
+            <div className="bg-green-600 rounded-b-2xl shadow-lg mt-3 pb-4 px-3 sm:px-4 space-y-2">
+              {/* Menu Items */}
               {menuItems.map((item, index) => (
                 <div
                   key={index}
@@ -312,7 +282,7 @@ const Navbar = () => {
                 >
                   <Link
                     href={item.href}
-                    className={`block text-white hover:text-gray-200 hover:bg-green-700 transition-all duration-300 font-bold py-2 px-3 rounded-lg ${
+                    className={`block text-white hover:text-gray-200 hover:bg-green-700 transition-all duration-300 font-bold py-2.5 px-3 rounded-lg ${
                       isScrolled ? "text-sm" : "text-base"
                     }`}
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -322,9 +292,9 @@ const Navbar = () => {
                 </div>
               ))}
 
-              {/* Mobile Avatar Profile */}
+              {/* Mobile Avatar Profile - Fixed positioning and spacing */}
               <div
-                className={`transform transition-all duration-300 ease-in-out ${
+                className={`transform transition-all duration-300 ease-in-out pt-2 ${
                   isMobileMenuOpen
                     ? "translate-y-0 opacity-100"
                     : "translate-y-4 opacity-0"
@@ -335,20 +305,16 @@ const Navbar = () => {
                     : "0ms",
                 }}
               >
-                <div className="bg-white rounded-xl p-4 space-y-3">
+                <div className="bg-white rounded-xl p-3 mx-1">
                   {/* Avatar Header */}
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`bg-green-600 text-white rounded-full flex items-center justify-center font-bold ${
-                        isScrolled ? "w-10 h-10 text-base" : "w-12 h-12 text-lg"
-                      }`}
-                    >
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="bg-green-600 text-white rounded-full flex items-center justify-center font-bold w-10 h-10 text-base flex-shrink-0">
                       JD
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-sm font-medium text-gray-700">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse flex-shrink-0"></div>
+                        <span className="text-sm font-medium text-gray-700 truncate">
                           Status: Aktif
                         </span>
                       </div>
@@ -356,49 +322,25 @@ const Navbar = () => {
                   </div>
 
                   {/* Profile Links */}
-                  <div className="space-y-2 pt-2 border-t border-gray-100">
+                  <div className="space-y-1 pt-2 border-t border-gray-100">
                     <Link
                       href="/profile"
-                      className="flex items-center p-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition-all duration-200"
+                      className="flex items-center p-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition-all duration-200 w-full"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <svg
-                        className="w-5 h-5 mr-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                      </svg>
-                      <span className="font-medium">Profile Saya</span>
+                      <FaRegUser className="w-4 h-4 mr-3 flex-shrink-0"/>
+                      <span className="font-medium text-sm">Profile Saya</span>
                     </Link>
 
                     <button
-                      className="w-full flex items-center p-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200"
+                      className="w-full flex items-center p-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         // Logout logic akan ditambahkan nanti
                       }}
                     >
-                      <svg
-                        className="w-5 h-5 mr-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                        />
-                      </svg>
-                      <span className="font-medium">Keluar Akun</span>
+                      <MdLogout className="w-4 h-4 mr-3 flex-shrink-0"/>
+                      <span className="font-medium text-sm">Keluar Akun</span>
                     </button>
                   </div>
                 </div>

@@ -500,6 +500,81 @@ const Section2DetailDataOrganisasiEdit = ({
           </div>
         </div>
 
+        {/* Laporan Tahunan Organisasi */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6 mt-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+              <IoDocumentTextOutline className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 text-lg">
+                Laporan Tahunan Organisasi
+              </h3>
+              <p className="text-slate-500 text-sm">
+                Upload dan kelola laporan tahunan organisasi
+              </p>
+            </div>
+          </div>
+
+          {/* Laporan Tersimpan */}
+          <div className="mb-6">
+            <h4 className="font-semibold text-slate-900 mb-4">Laporan Tersimpan</h4>
+            <div className="space-y-3">
+              {/* Laporan 2025 */}
+              <div className="flex items-center justify-between p-4 border border-slate-200 rounded-lg bg-slate-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-red-100 rounded flex items-center justify-center">
+                    <IoDocumentTextOutline className="w-4 h-4 text-red-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-slate-900">Laporan 2025</span>
+                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
+                        Uploaded
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-600">File: show (14).pdf</p>
+                    <p className="text-sm text-slate-600">Ukuran: 0.15 MB</p>
+                    <p className="text-sm text-slate-600">Diupload pada: 23/7/2025</p>
+                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm hover:underline">
+                      Lihat Laporan PDF
+                    </button>
+                  </div>
+                </div>
+                <button className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg">
+                  <FaRegTrashCan className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Laporan 2029 */}
+              <div className="flex items-center justify-between p-4 border border-slate-200 rounded-lg bg-slate-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-red-100 rounded flex items-center justify-center">
+                    <IoDocumentTextOutline className="w-4 h-4 text-red-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-slate-900">Laporan 2029</span>
+                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
+                        Uploaded
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-600">File: vertopai.com_Halal_Logo_YOLOv8.pdf</p>
+                    <p className="text-sm text-slate-600">Ukuran: 2.05 MB</p>
+                    <p className="text-sm text-slate-600">Diupload pada: 23/7/2025</p>
+                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm hover:underline">
+                      Lihat Laporan PDF
+                    </button>
+                  </div>
+                </div>
+                <button className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg">
+                  <FaRegTrashCan className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Catatan, Status, dan Link File Surat Resmi */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">

@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -22,11 +23,12 @@ const SideNavbar = () => {
     };
     // Di Next.js, Anda bisa mendengarkan event router
     // Ini adalah contoh sederhana, mungkin perlu disesuaikan dengan versi Next.js Anda
-    window.addEventListener("hashchange", handleRouteChange, false);
+    window.addEventListener('hashchange', handleRouteChange, false);
     return () => {
-      window.removeEventListener("hashchange", handleRouteChange, false);
+      window.removeEventListener('hashchange', handleRouteChange, false);
     };
   }, []);
+
 
   return (
     <>
@@ -81,24 +83,18 @@ const SideNavbar = () => {
           {/* Menu Navigasi */}
           <ul className="space-y-2">
             <li>
-              <Link
-                href="/dashboard-admin"
-                className="text-white hover:text-gray-200 block py-2"
-              >
+              <Link href="/dashboard-admin" className="text-white hover:text-gray-200 block py-2">
                 Dashboard
               </Link>
             </li>
             <li>
-              <Link
-                href="/data-organisasi-admin"
-                className="text-white hover:text-gray-200 block py-2"
-              >
+              <Link href="/data-organisasi-admin" className="text-white hover:text-gray-200 block py-2">
                 Data Organisasi
               </Link>
             </li>
             <li className="relative">
               <div
-                className="text-white hover:text-gray-200 block py-2 cursor-pointer items-center"
+                className="text-white hover:text-gray-200 block py-2 cursor-pointer flex items-center"
                 onClick={() => setIsOpen(!isOpen)}
               >
                 <IoMdArrowDropright
@@ -114,39 +110,24 @@ const SideNavbar = () => {
                   isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
-                <Link
-                  href="/berita-admin"
-                  className="text-white hover:text-gray-200 block py-2 px-4"
-                >
+                <Link href="/berita-admin" className="text-white hover:text-gray-200 block py-2 px-4">
                   Berita
                 </Link>
-                <Link
-                  href="/bidang-admin"
-                  className="text-white hover:text-gray-200 block py-2 px-4"
-                >
+                <Link href="/bidang-admin" className="text-white hover:text-gray-200 block py-2 px-4">
                   Bidang
                 </Link>
-                <Link
-                  href="/tentang-kami-admin"
-                  className="text-white hover:text-gray-200 block py-2 px-4"
-                >
+                <Link href="/tentang-kami-admin" className="text-white hover:text-gray-200 block py-2 px-4">
                   Tentang Kami
                 </Link>
               </div>
             </li>
             <li>
-              <Link
-                href="/bidang-kajian-admin"
-                className="text-white hover:text-gray-200 block py-2"
-              >
+              <Link href="/bidang-kajian-admin" className="text-white hover:text-gray-200 block py-2">
                 Bidang Kajian
               </Link>
             </li>
             <li>
-              <Link
-                href="/faq-admin"
-                className="text-white hover:text-gray-200 block py-2"
-              >
+              <Link href="/faq-admin" className="text-white hover:text-gray-200 block py-2">
                 FAQ
               </Link>
             </li>
@@ -158,21 +139,13 @@ const SideNavbar = () => {
           {/* Admin Menu Dropdown */}
           <div
             className={`absolute bottom-full left-0 w-full bg-slate-700 rounded-lg shadow-lg transition-all duration-300 ease-in-out overflow-hidden ${
-              isAdminMenuOpen
-                ? "max-h-300 opacity-100 mb-2"
-                : "max-h-0 opacity-0 mb-0"
+              isAdminMenuOpen ? "max-h-300 opacity-100 mb-2" : "max-h-0 opacity-0 mb-0"
             }`}
           >
-            <Link
-              href="/profile-admin"
-              className="text-white hover:bg-slate-600 block py-3 px-4 transition-colors"
-            >
+            <Link href="/profile-admin" className="text-white hover:bg-slate-600 block py-3 px-4 transition-colors">
               Profile
             </Link>
-            <Link
-              href="/auth/login"
-              className="text-white hover:bg-slate-600 block py-3 px-4 transition-colors"
-            >
+            <Link href="/auth/login" className="text-white hover:bg-slate-600 block py-3 px-4 transition-colors">
               Keluar
             </Link>
           </div>
@@ -196,13 +169,12 @@ const SideNavbar = () => {
               </div>
             </div>
 
-            <IoIosArrowForward
-              className={`mr-2 transition-transform duration-300 ease-in-out ${
-                isAdminMenuOpen ? "-rotate-90" : "rotate-0"
-              }`}
-              size={20}
-              onClick={() => setIsAdminMenuOpen(!isAdminMenuOpen)}
-            />
+            <IoIosArrowForward className={`mr-2 transition-transform duration-300 ease-in-out ${
+                    isAdminMenuOpen ? "-rotate-90" : "rotate-0"
+                  }`}
+                  size={20}
+                  onClick={() => setIsAdminMenuOpen(!isAdminMenuOpen)}
+                  />
           </div>
         </div>
       </nav>
