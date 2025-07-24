@@ -30,10 +30,6 @@ const Section2SuccessDaftar: React.FC = () => {
     router.push("/");
   };
 
-  const handleDaftarLagi = () => {
-    router.push("/daftar-ormas");
-  };
-
   return (
     <div className="min-h-screen">
       {/* Section 1: Header dengan Background Image */}
@@ -150,17 +146,18 @@ const Section2SuccessDaftar: React.FC = () => {
                   <ul className="text-blue-700 space-y-1">
                     <li>
                       • Pendaftaran Anda akan diverifikasi oleh tim admin dalam
-                      3-5 hari kerja
+                      2-5 hari kerja
                     </li>
                     <li>
-                      • Anda akan mendapat notifikasi email mengenai status
-                      pendaftaran
+                      • Anda akan mendapat notifikasi email atau WhatsApp
+                      mengenai status pendaftaran
                     </li>
                     <li>
                       • Pastikan email dan nomor telepon yang didaftarkan aktif
                     </li>
                     <li>
                       • Status pendaftaran dapat dilihat di dashboard akun Anda
+                      atau Melalui Halaman Daftar Ormas ini
                     </li>
                   </ul>
                 </div>
@@ -218,12 +215,6 @@ const Section2SuccessDaftar: React.FC = () => {
                 className="px-8 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all duration-200 transform hover:scale-[1.02] focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 border border-gray-300"
               >
                 Kembali ke Beranda
-              </button>
-              <button
-                onClick={handleDaftarLagi}
-                className="px-8 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-all duration-200 transform hover:scale-[1.02] focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-              >
-                Daftar Ormas Lagi
               </button>
             </div>
 
