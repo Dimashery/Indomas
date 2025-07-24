@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { FaRegEdit } from "react-icons/fa";
-import { FaWhatsapp } from "react-icons/fa6";
+import React, { useState, useEffect } from "react";
+import {
+  FaPenToSquare, // Using FaPenToSquare instead of FaRegEdit
+  FaWhatsapp,
+  FaRegTrashCan,
+  FaDownload,
+} from "react-icons/fa6";
 import { GrStatusGood } from "react-icons/gr";
 import { PiNoteDuotone } from "react-icons/pi";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { AiOutlineNotification } from "react-icons/ai";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { IoMdArrowDropright } from "react-icons/io";
-import { IoMdArrowDropleft } from "react-icons/io";
-import Link from "next/link";
+import { IoMdArrowDropright, IoMdArrowDropleft } from "react-icons/io";
 
 interface AnggotaData {
   id: number;
@@ -35,13 +36,7 @@ interface OrganisasiData {
   avatar?: string;
 }
 
-interface Section2DetailDataOrganisasiEditProps {
-  id: string;
-}
-
-const Section2DetailDataOrganisasiEdit = ({
-  id,
-}: Section2DetailDataOrganisasiEditProps) => {
+const Section2DetailDataOrganisasiEdit = () => {
   const [organisasiData, setOrganisasiData] = useState<OrganisasiData>({
     id: "",
     nama: "",
@@ -63,157 +58,204 @@ const Section2DetailDataOrganisasiEdit = ({
   const [linkGoogleDrive, setlinkGoogleDrive] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  // Mock data
-  const mockAnggotaData: AnggotaData[] = [
-    {
-      id: 1,
-      nama: "Kebersamaan Sosial",
-      jabatan: "Agama",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 2,
-      nama: "Titas Tearman",
-      jabatan: "Politik",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 3,
-      nama: "Jemima Mayer",
-      jabatan: "Sosial",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 4,
-      nama: "Paloma Sosial",
-      jabatan: "Sosial",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 5,
-      nama: "Lusia Melarai",
-      jabatan: "Agama",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 6,
-      nama: "Kalea Elind",
-      jabatan: "Agama",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 7,
-      nama: "Marlana Bintama",
-      jabatan: "Politik",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 8,
-      nama: "Sitalika",
-      jabatan: "Politik",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 9,
-      nama: "Fiza Yeti",
-      jabatan: "Agama",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 10,
-      nama: "Galang Sama",
-      jabatan: "Sosial",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 11,
-      nama: "Kebersamaan Sosial",
-      jabatan: "Agama",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 12,
-      nama: "Titas Tearman",
-      jabatan: "Politik",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 13,
-      nama: "Jemima Mayer",
-      jabatan: "Sosial",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 14,
-      nama: "Paloma Sosial",
-      jabatan: "Sosial",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-    {
-      id: 15,
-      nama: "Lusia Melarai",
-      jabatan: "Agama",
-      noKeanggotaan: "202829",
-      noHandphone: "081234567890",
-      noSK: "123/Kebersamaan Sosial/2024",
-    },
-  ];
-
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(mockAnggotaData.length / itemsPerPage);
-
-  const mockOrganisasiData: OrganisasiData = {
-    id: "1",
-    nama: "Kebersamaan Sosial",
-    jenis: "Sosial",
-    alamat: "Jl. KH. Kauman, Yogyakarta",
-    telepon: "085875793265",
-    email: "kebersamaan.sosial@gmail.com",
-    website: "kebersamaan.sosial.id",
-    instagram: "kebersamaan_sosial",
-    deskripsi:
-      "Organisasi Kebersamaan Sosial merupakan organisasi yang didirikan dengan tujuan untuk membangun solidaritas dan kepedulian sosial di masyarakat. Kami berkomitmen untuk menciptakan program-program yang bermanfaat bagi kesejahteraan bersama.",
-    tanggal: "02-07-2025",
-    avatar: "/kotabatu.png",
-  };
-
   // Load mock data
   useEffect(() => {
+    // Mock data defined inside useEffect to avoid dependency warnings
+    const mockAnggotaData: AnggotaData[] = [
+      {
+        id: 1,
+        nama: "Kebersamaan Sosial",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 2,
+        nama: "Titas Tearman",
+        jabatan: "Politik",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 3,
+        nama: "Jemima Mayer",
+        jabatan: "Sosial",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 4,
+        nama: "Paloma Sosial",
+        jabatan: "Sosial",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 5,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 6,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 7,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 8,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 9,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 10,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 11,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 12,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 13,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 14,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+      {
+        id: 15,
+        nama: "Lusia Melarai",
+        jabatan: "Agama",
+        noKeanggotaan: "202829",
+        noHandphone: "081234567890",
+        noSK: "123/Kebersamaan Sosial/2024",
+      },
+    ];
+
+    const mockOrganisasiData: OrganisasiData = {
+      id: "1",
+      nama: "Kebersamaan Sosial",
+      jenis: "Sosial",
+      alamat: "Jl. KH. Kauman, Yogyakarta",
+      telepon: "085875793265",
+      email: "kebersamaan.sosial@gmail.com",
+      website: "kebersamaan.sosial.id",
+      instagram: "kebersamaan_sosial",
+      deskripsi:
+        "Organisasi Kebersamaan Sosial merupakan organisasi yang didirikan dengan tujuan untuk membangun solidaritas dan kepedulian sosial di masyarakat. Kami berkomitmen untuk menciptakan program-program yang bermanfaat bagi kesejahteraan bersama.",
+      tanggal: "02-07-2025",
+      avatar: "/kotabatu.png",
+    };
+
     setTimeout(() => {
       setAnggotaData(mockAnggotaData);
       setOrganisasiData(mockOrganisasiData);
       setLoading(false);
     }, 1000);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, []); // Empty dependency array is now correct
+
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(anggotaData.length / itemsPerPage);
+
+  // Function to download Excel
+  const downloadExcel = () => {
+    // Create CSV content
+    const headers = [
+      "No",
+      "Nama Anggota",
+      "Jabatan",
+      "No Keanggotaan",
+      "No Handphone",
+      "No SK",
+    ];
+    const csvContent = [
+      headers.join(","),
+      ...anggotaData.map((anggota, index) =>
+        [
+          index + 1,
+          "${anggota.nama}",
+          "${anggota.jabatan}",
+          anggota.noKeanggotaan,
+          anggota.noHandphone,
+          "${anggota.noSK}",
+        ].join(",")
+      ),
+    ].join("\n");
+
+    // Add BOM for proper UTF-8 encoding in Excel
+    const BOM = "\uFEFF";
+    const blob = new Blob([BOM + csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    // Create download link
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `Struktur_Pengurus_${organisasiData.nama || "Organisasi"}_${
+        new Date().toISOString().split("T")[0]
+      }.csv`
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   const handleSubmit = () => {
     if (status && linkGoogleDrive.trim()) {
@@ -234,7 +276,6 @@ const Section2DetailDataOrganisasiEdit = ({
   const endIndex = startIndex + itemsPerPage;
   const currentData = anggotaData.slice(startIndex, endIndex);
 
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex justify-center items-center">
@@ -251,12 +292,24 @@ const Section2DetailDataOrganisasiEdit = ({
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">
-            Struktur Pengurus
-          </h1>
-          <p className="text-slate-600">
-            Kelola dan ubah informasi anggota organisasi
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">
+                Struktur Pengurus
+              </h1>
+              <p className="text-slate-600">
+                Kelola dan ubah informasi anggota organisasi
+              </p>
+            </div>
+            {/* Download Button */}
+            <button
+              onClick={downloadExcel}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 hover:shadow-lg hover:scale-105 transition-all duration-200 shadow-sm group"
+            >
+              <FaDownload className="w-4 h-4 group-hover:animate-bounce" />
+              <span>Download Excel</span>
+            </button>
+          </div>
         </div>
 
         {/* Data Anggota */}
@@ -280,8 +333,7 @@ const Section2DetailDataOrganisasiEdit = ({
                         <h3 className="font-semibold text-slate-900 mb-1">
                           {startIndex + index + 1}. {anggota.nama}
                         </h3>
-                        <span
-                          className={`inline-block px-2 py-1 text-sm font-semibold`}>
+                        <span className="inline-block px-2 py-1 text-sm font-semibold">
                           {anggota.jabatan}
                         </span>
                       </div>
@@ -379,7 +431,7 @@ const Section2DetailDataOrganisasiEdit = ({
                           {anggota.nama}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
-                          <span className={`inline-block px-2 py-1 text-sm font-semibold`}>
+                          <span className="inline-block px-2 py-1 text-sm font-semibold">
                             {anggota.jabatan}
                           </span>
                         </td>
@@ -648,7 +700,7 @@ const Section2DetailDataOrganisasiEdit = ({
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <AiOutlineNotification className="w-5 h-5 text-green-600" />
+                <AiOutlineNotification className="w-5 h-5 text-green-600" />
               </div>
               <h3 className="font-semibold text-slate-900">
                 Konfirmasi Melalui WhatsApp
@@ -691,18 +743,16 @@ const Section2DetailDataOrganisasiEdit = ({
             onClick={handleHapusAkun}
             className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors shadow-sm"
           >
-            <FaRegTrashCan className="w-5 h-5"/>
+            <FaRegTrashCan className="w-5 h-5" />
             Hapus Akun
           </button>
-          <Link
-            href='/data-organisasi-admin'
+          <button
             onClick={handleSubmit}
             className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
           >
-            <FaRegEdit className="w-5 h-5" />
+            <FaPenToSquare className="w-5 h-5" />
             <span>Simpan</span>
-          </Link>
-
+          </button>
         </div>
       </div>
     </div>
