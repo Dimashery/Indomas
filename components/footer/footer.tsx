@@ -9,7 +9,8 @@ import { useForm, ValidationError } from "@formspree/react";
 
 // Contact Form Component
 const ContactForm = () => {
-  const [state, handleSubmit] = useForm("meokyjyr");
+  // Menggunakan link Formspree yang baru
+  const [state, handleSubmit] = useForm("xnnzvjak");
   const [showSuccess, setShowSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formRef, setFormRef] = useState<HTMLFormElement | null>(null);
@@ -79,19 +80,6 @@ const ContactForm = () => {
             <div className="bg-green-600 h-full rounded-full animate-pulse"></div>
           </div>
         </div>
-
-        {/* <button
-          onClick={() => {
-            setShowSuccess(false);
-            // Reset form state
-            if (formRef) {
-              formRef.reset();
-            }
-          }}
-          className="mt-4 w-full bg-white/20 hover:bg-white/30 text-white font-medium px-6 py-3 rounded-xl transition-all duration-300 backdrop-blur-sm border border-white/30 hover:border-white/50"
-        >
-          Kirim Pesan Lagi
-        </button> */}
       </div>
     );
   }
