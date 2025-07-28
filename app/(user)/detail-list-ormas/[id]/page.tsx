@@ -30,19 +30,19 @@ interface DetailOrmasPageProps {
 const DetailOrmasPage: React.FC<DetailOrmasPageProps> = ({ params }) => {
   // Unwrap params Promise using React.use()
   const { id } = use(params);
-
+  
   const [ormasData, setOrmasData] = useState<OrmasData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  
   useEffect(() => {
     const fetchOrmasData = async () => {
       try {
         setLoading(true);
-
+        
         // Simulate API call - replace with actual API endpoint
         await new Promise((resolve) => setTimeout(resolve, 1000));
-
+        
         // Mock data - replace with actual API call
         const mockData: OrmasData = {
           id: id,
@@ -53,10 +53,10 @@ const DetailOrmasPage: React.FC<DetailOrmasPageProps> = ({ params }) => {
           address: "Jl. Dinoyo Raya No. 8, Manyar",
           registrationDate: "2-7-2025",
           description:
-            "Organisasi Kebersamaan Sosial merupakan organisasi yang didirikan oleh....",
+          "Organisasi Kebersamaan Sosial merupakan organisasi yang didirikan oleh....",
           status: "active",
         };
-
+        
         setOrmasData(mockData);
         setError(null);
       } catch (err) {
@@ -66,12 +66,12 @@ const DetailOrmasPage: React.FC<DetailOrmasPageProps> = ({ params }) => {
         setLoading(false);
       }
     };
-
+    
     if (id) {
       fetchOrmasData();
     }
   }, [id]);
-
+  
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -83,7 +83,7 @@ const DetailOrmasPage: React.FC<DetailOrmasPageProps> = ({ params }) => {
       </div>
     );
   }
-
+  
   if (error || !ormasData) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -96,7 +96,7 @@ const DetailOrmasPage: React.FC<DetailOrmasPageProps> = ({ params }) => {
             <button
               onClick={() => window.history.back()}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-            >
+              >
               Kembali
             </button>
           </div>
@@ -105,7 +105,8 @@ const DetailOrmasPage: React.FC<DetailOrmasPageProps> = ({ params }) => {
       </div>
     );
   }
-
+  
+ 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
