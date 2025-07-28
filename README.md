@@ -5,6 +5,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
+git clone --branch main https://github.com/Dimashery/Indomas.git
+
 bun install
 
 bun run dev (untuk menjalankan NextJs)
