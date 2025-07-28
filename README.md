@@ -2,17 +2,28 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+1. Lakukan cloning repository github Indomas ini dengan menjalankan perintah ini di CMD :
 
 ```bash
 git clone --branch main https://github.com/Dimashery/Indomas.git
+```
+2. Buka Project NextJS nya, dan langkah selanjutnya bisa menuliskan perintah berikut di VSCODE anda (bisa Powershell atau CMD) :
+Note : Gunakan sistem Bun untuk Runtime Typescript, untuk dokumentasi nya bisa dilihat pada Link berikut ini :
 
+```bash
+[bun install](https://bun.sh/docs/installation)
+
+Untuk Menginstall Dependencies NextJs : 
 bun install
+```
 
+3. Untuk menjalankan Project NextJS secara Lokal maka bisa di ketikkan pada CMD / Powershell di Vscode :
+
+```bash
 bun run dev (untuk menjalankan NextJs)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka [http://localhost:3000](http://localhost:3000) Melalui Website untuk melihat hasilnya.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
