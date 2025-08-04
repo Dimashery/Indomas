@@ -9,8 +9,8 @@ import { useForm, ValidationError } from "@formspree/react";
 
 // Contact Form Component
 const ContactForm = () => {
-  // Menggunakan link Formspree yang baru
-  const [state, handleSubmit] = useForm("xnnzvjak");
+  // Menggunakan form ID yang baru dari contoh
+  const [state, handleSubmit] = useForm("mpwljgzg");
   const [showSuccess, setShowSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formRef, setFormRef] = useState<HTMLFormElement | null>(null);
@@ -87,6 +87,9 @@ const ContactForm = () => {
   return (
     <form ref={setFormRef} onSubmit={handleFormSubmit} className="space-y-4">
       <div className="relative">
+        <label htmlFor="email" className="sr-only">
+          Email Address
+        </label>
         <input
           id="email"
           type="email"
@@ -94,40 +97,44 @@ const ContactForm = () => {
           placeholder="Masukkan email Anda"
           className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent backdrop-blur-sm transition-all"
           required
-          disabled={isSubmitting}
+          disabled={state.submitting || isSubmitting}
         />
         <ValidationError
           prefix="Email"
           field="email"
           errors={state.errors}
-          className="text-red-300 text-sm mt-1"
+          className="text-red-300 text-sm mt-1 block"
         />
       </div>
 
       <div className="relative">
+        <label htmlFor="message" className="sr-only">
+          Message
+        </label>
         <textarea
           id="message"
           name="message"
           placeholder="Tulis pesan Anda di sini"
           rows={4}
           className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent backdrop-blur-sm resize-none transition-all"
-          disabled={isSubmitting}
+          disabled={state.submitting || isSubmitting}
+          required
         />
         <ValidationError
           prefix="Message"
           field="message"
           errors={state.errors}
-          className="text-red-300 text-sm mt-1"
+          className="text-red-300 text-sm mt-1 block"
         />
       </div>
 
       <button
         type="submit"
-        disabled={isSubmitting}
-        className="w-full bg-white/20 hover:bg-white/30 text-white font-medium px-6 py-3 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm border border-white/30 hover:border-white/50 relative overflow-hidden"
+        disabled={state.submitting || isSubmitting}
+        className="w-full bg-white/20 hover:bg-white/30 text-white font-medium px-6 py-3 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm border border-white/30 hover:border-white/50 relative overflow-hidden group"
       >
         <div className="flex items-center justify-center space-x-2">
-          {isSubmitting ? (
+          {state.submitting || isSubmitting ? (
             <>
               <svg
                 className="w-5 h-5 animate-spin"
@@ -165,7 +172,7 @@ const ContactForm = () => {
         </div>
 
         {/* Loading overlay */}
-        {isSubmitting && (
+        {(state.submitting || isSubmitting) && (
           <div className="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl animate-pulse"></div>
         )}
       </button>

@@ -160,10 +160,10 @@ const FAQ: React.FC = () => {
                 Masih ada pertanyaan? Kontak melalui email kami
               </p>
               <a
-                href="mailto:indomas.kesbangpol.kotabatu@gmail.com"
+                href="mailto:indomas.bakesbangpol.kotabatu@gmail.com"
                 className="text-green-600 hover:text-green-700 transition-all duration-200 font-medium hover:underline transform hover:scale-105"
               >
-                indomas.kesbangpol.kotabatu@gmail.com
+                indomas.bakesbangpol.kotabatu@gmail.com
               </a>
             </div>
           </div>
