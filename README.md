@@ -23,6 +23,13 @@ bun install
 bun run dev (untuk menjalankan NextJs)
 ```
 
+4. Saat melakukan Git Clone dan menjalankan project nya, harus membuat file baru dengan nama .env dan isinya sebagai berikut :
+
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+
 Buka [http://localhost:3000](http://localhost:3000) Melalui Website untuk melihat hasilnya.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
