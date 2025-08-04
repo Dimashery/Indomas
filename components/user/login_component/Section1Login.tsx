@@ -3,23 +3,55 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { performLogin } from "./fetch";
+import { useRouter } from "next/navigation";
 
 export default function Section1Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  
+  const router = useRouter();
 
   useEffect(() => {
     // Trigger animations after component mounts
     setIsLoaded(true);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login attempt:", { email, password });
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const result = await performLogin({
+        email_pengguna: email,
+        password_pengguna: password,
+        rememberMe: false
+      });
+
+      if (result.success) {
+        setSuccess(result.message);
+        
+        // Tunggu sebentar untuk menampilkan pesan sukses
+        setTimeout(() => {
+          router.push(result.redirectUrl);
+        }, 1500);
+      } else {
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("Terjadi kesalahan saat login. Silakan coba lagi.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -92,6 +124,20 @@ export default function Section1Login() {
             LOGIN
           </h1>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-sm">
+              {success}
+            </div>
+          )}
+
           {/* Login Form with staggered field animations */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
@@ -114,8 +160,9 @@ export default function Section1Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Masukkan Email Anda"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
+                disabled={isLoading}
               />
             </div>
 
@@ -140,13 +187,15 @@ export default function Section1Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Masukkan Password Anda"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 pr-12 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 pr-12 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                   required
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 hover:scale-110"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 hover:scale-110 disabled:opacity-50"
+                  disabled={isLoading}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -183,9 +232,17 @@ export default function Section1Login() {
             >
               <button
                 type="submit"
-                className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none shadow-lg hover:shadow-xl active:scale-95"
+                disabled={isLoading}
+                className="w-full bg-green-500 hover:bg-green-600 disabled:bg-green-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none shadow-lg hover:shadow-xl active:scale-95 disabled:hover:scale-100 disabled:hover:shadow-lg flex items-center justify-center gap-2"
               >
-                Masuk
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Memproses...
+                  </>
+                ) : (
+                  "Masuk"
+                )}
               </button>
             </div>
 

@@ -5,6 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import {
+  signupUser,
+  mapFormDataToApiData,
+  getErrorMessage,
+  saveAuthData,
+  ApiError,
+} from "../signup_components/fetch";
 
 export default function Section1Signup() {
   const router = useRouter();
@@ -30,10 +37,28 @@ export default function Section1Signup() {
     "error"
   );
 
+  // Field-specific error states
+  const [fieldErrors, setFieldErrors] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    namaOrganisasi: "",
+    alamatOrganisasi: "",
+    noHandphone: "",
+  });
+
   useEffect(() => {
     // Trigger animations after component mounts
     setIsLoaded(true);
   }, []);
+
+  // Clear field error when user types
+  const clearFieldError = (fieldName: keyof typeof fieldErrors) => {
+    setFieldErrors((prev) => ({
+      ...prev,
+      [fieldName]: "",
+    }));
+  };
 
   // Password validation function
   const validatePassword = (password: string) => {
@@ -67,21 +92,39 @@ export default function Section1Signup() {
     if (passwordError) {
       setPasswordError("");
     }
+    clearFieldError("password");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Clear all previous errors
+    setFieldErrors({
+      email: "",
+      password: "",
+      confirmPassword: "",
+      namaOrganisasi: "",
+      alamatOrganisasi: "",
+      noHandphone: "",
+    });
+    setPasswordError("");
+
     // Validate password strength
     if (!validatePassword(password)) {
-      setPasswordError("Password harus memenuhi kriteria di atas");
+      setFieldErrors((prev) => ({
+        ...prev,
+        password: "Password harus memenuhi kriteria di atas",
+      }));
       showAlertMessage("Password tidak memenuhi kriteria keamanan!", "error");
       return;
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
-      setPasswordError("Password tidak cocok");
+      setFieldErrors((prev) => ({
+        ...prev,
+        confirmPassword: "Password tidak cocok",
+      }));
       showAlertMessage(
         "Password dan konfirmasi password tidak cocok!",
         "error"
@@ -89,41 +132,94 @@ export default function Section1Signup() {
       return;
     }
 
-    // Reset error
-    setPasswordError("");
-
     // Set loading state
     setIsSubmitting(true);
 
     try {
-      // Handle signup logic here
-      console.log("Signup attempt:", {
+      // Prepare data for API
+      const formData = {
+        namaOrganisasi,
         email,
         password,
-        namaOrganisasi,
+        confirmPassword,
         alamatOrganisasi,
         noHandphone,
-      });
+      };
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Map form data to API format
+      const apiData = mapFormDataToApiData(formData);
+
+      // Call signup API
+      const response = await signupUser(apiData);
+
+      // Save auth data to localStorage (optional)
+      saveAuthData(response.data);
 
       // Show success message
       showAlertMessage("Akun berhasil dibuat! Mengalihkan...", "success");
 
       // Redirect to success page after a brief delay
       setTimeout(() => {
-        router.push("/auth/signup/berhasil-signup");
-      }, 1500);
+        try {
+          router.push("/auth/signup/berhasil-signup");
+        } catch (navError) {
+          console.error("Navigation error:", navError);
+          // Fallback navigation using window.location
+          window.location.href = "/auth/signup/berhasil-signup";
+        }
+      }, 2000); // Increased delay to 2 seconds
     } catch (error) {
       console.error("Signup failed:", error);
-      setPasswordError(
-        "Terjadi kesalahan saat membuat akun. Silakan coba lagi."
-      );
-      showAlertMessage(
-        "Terjadi kesalahan saat membuat akun. Silakan coba lagi.",
-        "error"
-      );
+
+      if (error instanceof ApiError) {
+        const errorMessage = getErrorMessage(error);
+
+        // Handle specific validation errors untuk field spesifik
+        if (error.status === 422 && error.errors) {
+          // Map validation errors to specific fields
+          if (error.errors.email_pengguna) {
+            setFieldErrors((prev) => ({
+              ...prev,
+              email: error.errors!.email_pengguna[0],
+            }));
+          }
+          if (error.errors.password_pengguna) {
+            setFieldErrors((prev) => ({
+              ...prev,
+              password: error.errors!.password_pengguna[0],
+            }));
+          }
+          if (error.errors.nama_pengguna) {
+            setFieldErrors((prev) => ({
+              ...prev,
+              namaOrganisasi: error.errors!.nama_pengguna[0],
+            }));
+          }
+          if (error.errors.alamat_pengguna) {
+            setFieldErrors((prev) => ({
+              ...prev,
+              alamatOrganisasi: error.errors!.alamat_pengguna[0],
+            }));
+          }
+          if (error.errors.no_telpon_pengguna) {
+            setFieldErrors((prev) => ({
+              ...prev,
+              noHandphone: error.errors!.no_telpon_pengguna[0],
+            }));
+          }
+
+          // Show general alert for validation errors
+          showAlertMessage("Silakan perbaiki error pada form", "error");
+        } else {
+          // General error
+          setPasswordError(errorMessage);
+          showAlertMessage(errorMessage, "error");
+        }
+      } else {
+        const generalError = "Terjadi kesalahan yang tidak terduga";
+        setPasswordError(generalError);
+        showAlertMessage(generalError, "error");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -259,11 +355,28 @@ export default function Section1Signup() {
                 type="email"
                 id="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  clearFieldError("email");
+                }}
                 placeholder="Masukkan Email Anda"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105"
+                className={`w-full px-4 py-3 rounded-lg border ${
+                  fieldErrors.email ? "border-red-300" : "border-gray-300"
+                } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
                 required
+                disabled={isSubmitting}
               />
+              {/* Email Error Message */}
+              {fieldErrors.email && (
+                <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center">
+                    <XCircle className="w-5 h-5 text-red-500 mr-2" />
+                    <p className="text-red-600 text-sm font-medium">
+                      {fieldErrors.email}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Password Field */}
@@ -287,13 +400,17 @@ export default function Section1Signup() {
                   value={password}
                   onChange={handlePasswordChange}
                   placeholder="Masukkan Password Anda"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 pr-12 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105"
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    fieldErrors.password ? "border-red-300" : "border-gray-300"
+                  } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 pr-12 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
                   required
+                  disabled={isSubmitting}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 hover:scale-110"
+                  disabled={isSubmitting}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -302,6 +419,18 @@ export default function Section1Signup() {
                   )}
                 </button>
               </div>
+
+              {/* Password Error Message */}
+              {fieldErrors.password && (
+                <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center">
+                    <XCircle className="w-5 h-5 text-red-500 mr-2" />
+                    <p className="text-red-600 text-sm font-medium">
+                      {fieldErrors.password}
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Password Strength Indicator */}
               {password && (
@@ -382,15 +511,24 @@ export default function Section1Signup() {
                   type={showConfirmPassword ? "text" : "password"}
                   id="confirmPassword"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    clearFieldError("confirmPassword");
+                  }}
                   placeholder="Konfirmasi Password Anda"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 pr-12 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105"
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    fieldErrors.confirmPassword
+                      ? "border-red-300"
+                      : "border-gray-300"
+                  } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 pr-12 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
                   required
+                  disabled={isSubmitting}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 hover:scale-110"
+                  disabled={isSubmitting}
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -399,17 +537,32 @@ export default function Section1Signup() {
                   )}
                 </button>
               </div>
-              {/* Password Error Message with animation */}
-              {passwordError && (
+
+              {/* Confirm Password Error Message */}
+              {fieldErrors.confirmPassword && (
                 <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <div className="flex items-center">
                     <XCircle className="w-5 h-5 text-red-500 mr-2" />
                     <p className="text-red-600 text-sm font-medium">
-                      {passwordError}
+                      {fieldErrors.confirmPassword}
                     </p>
                   </div>
                 </div>
               )}
+
+              {/* General Password Error Message (fallback) */}
+              {passwordError &&
+                !fieldErrors.password &&
+                !fieldErrors.confirmPassword && (
+                  <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <div className="flex items-center">
+                      <XCircle className="w-5 h-5 text-red-500 mr-2" />
+                      <p className="text-red-600 text-sm font-medium">
+                        {passwordError}
+                      </p>
+                    </div>
+                  </div>
+                )}
             </div>
 
             {/* Nama Organisasi Field */}
@@ -430,11 +583,30 @@ export default function Section1Signup() {
                 type="text"
                 id="namaOrganisasi"
                 value={namaOrganisasi}
-                onChange={(e) => setNamaOrganisasi(e.target.value)}
+                onChange={(e) => {
+                  setNamaOrganisasi(e.target.value);
+                  clearFieldError("namaOrganisasi");
+                }}
                 placeholder="Masukkan Nama Organisasi Anda"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105"
+                className={`w-full px-4 py-3 rounded-lg border ${
+                  fieldErrors.namaOrganisasi
+                    ? "border-red-300"
+                    : "border-gray-300"
+                } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
                 required
+                disabled={isSubmitting}
               />
+              {/* Nama Organisasi Error Message */}
+              {fieldErrors.namaOrganisasi && (
+                <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center">
+                    <XCircle className="w-5 h-5 text-red-500 mr-2" />
+                    <p className="text-red-600 text-sm font-medium">
+                      {fieldErrors.namaOrganisasi}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Alamat Organisasi Field */}
@@ -455,11 +627,30 @@ export default function Section1Signup() {
                 type="text"
                 id="alamatOrganisasi"
                 value={alamatOrganisasi}
-                onChange={(e) => setAlamatOrganisasi(e.target.value)}
+                onChange={(e) => {
+                  setAlamatOrganisasi(e.target.value);
+                  clearFieldError("alamatOrganisasi");
+                }}
                 placeholder="Masukkan Alamat Organisasi Anda"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105"
+                className={`w-full px-4 py-3 rounded-lg border ${
+                  fieldErrors.alamatOrganisasi
+                    ? "border-red-300"
+                    : "border-gray-300"
+                } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
                 required
+                disabled={isSubmitting}
               />
+              {/* Alamat Organisasi Error Message */}
+              {fieldErrors.alamatOrganisasi && (
+                <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center">
+                    <XCircle className="w-5 h-5 text-red-500 mr-2" />
+                    <p className="text-red-600 text-sm font-medium">
+                      {fieldErrors.alamatOrganisasi}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* No Handphone Field */}
@@ -480,11 +671,28 @@ export default function Section1Signup() {
                 type="tel"
                 id="noHandphone"
                 value={noHandphone}
-                onChange={(e) => setNoHandphone(e.target.value)}
+                onChange={(e) => {
+                  setNoHandphone(e.target.value);
+                  clearFieldError("noHandphone");
+                }}
                 placeholder="Masukkan No Handphone Anda"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105"
+                className={`w-full px-4 py-3 rounded-lg border ${
+                  fieldErrors.noHandphone ? "border-red-300" : "border-gray-300"
+                } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
                 required
+                disabled={isSubmitting}
               />
+              {/* No Handphone Error Message */}
+              {fieldErrors.noHandphone && (
+                <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center">
+                    <XCircle className="w-5 h-5 text-red-500 mr-2" />
+                    <p className="text-red-600 text-sm font-medium">
+                      {fieldErrors.noHandphone}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Signup Button */}
