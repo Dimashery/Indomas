@@ -402,22 +402,27 @@ export default function Section1Signup() {
                   placeholder="Masukkan Password Anda"
                   className={`w-full px-4 py-3 rounded-lg border ${
                     fieldErrors.password ? "border-red-300" : "border-gray-300"
-                  } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 pr-12 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
+                  } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 ${
+                    password ? "pr-12" : "pr-4"
+                  } bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
                   required
                   disabled={isSubmitting}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 hover:scale-110"
-                  disabled={isSubmitting}
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
-                </button>
+                {/* Only show eye icon when there's text in password field */}
+                {password && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 hover:scale-110"
+                    disabled={isSubmitting}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                )}
               </div>
 
               {/* Password Error Message */}
@@ -520,22 +525,27 @@ export default function Section1Signup() {
                     fieldErrors.confirmPassword
                       ? "border-red-300"
                       : "border-gray-300"
-                  } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 pr-12 bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
+                  } focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all duration-200 text-gray-700 placeholder-gray-400 ${
+                    confirmPassword ? "pr-12" : "pr-4"
+                  } bg-white bg-opacity-90 hover:bg-opacity-100 focus:transform focus:scale-105`}
                   required
                   disabled={isSubmitting}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 hover:scale-110"
-                  disabled={isSubmitting}
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
-                </button>
+                {/* Only show eye icon when there's text in confirm password field */}
+                {confirmPassword && (
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all duration-200 hover:scale-110"
+                    disabled={isSubmitting}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                )}
               </div>
 
               {/* Confirm Password Error Message */}

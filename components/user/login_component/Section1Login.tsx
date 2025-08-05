@@ -15,7 +15,7 @@ export default function Section1Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  
+
   const router = useRouter();
 
   useEffect(() => {
@@ -33,12 +33,12 @@ export default function Section1Login() {
       const result = await performLogin({
         email_pengguna: email,
         password_pengguna: password,
-        rememberMe: false
+        rememberMe: false,
       });
 
       if (result.success) {
         setSuccess(result.message);
-        
+
         // Tunggu sebentar untuk menampilkan pesan sukses
         setTimeout(() => {
           router.push(result.redirectUrl);

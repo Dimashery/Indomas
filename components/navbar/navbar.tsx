@@ -34,16 +34,16 @@ const Navbar = () => {
     if (!isClient) return;
 
     const checkAuth = () => {
-      const token = localStorage.getItem('token');
-      const userDataStr = localStorage.getItem('userData');
-      
+      const token = localStorage.getItem("token");
+      const userDataStr = localStorage.getItem("userData");
+
       if (token && userDataStr) {
         try {
           const parsedUserData: UserData = JSON.parse(userDataStr);
           setIsAuthenticated(true);
           setUserData(parsedUserData);
         } catch (error) {
-          console.error('Error parsing user data:', error);
+          console.error("Error parsing user data:", error);
           setIsAuthenticated(false);
           setUserData(null);
         }
@@ -58,13 +58,13 @@ const Navbar = () => {
 
     // Listen for storage changes (when user logs in/out in another tab)
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'token' || e.key === 'userData') {
+      if (e.key === "token" || e.key === "userData") {
         checkAuth();
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, [isClient]);
 
   useEffect(() => {
@@ -83,10 +83,7 @@ const Navbar = () => {
 
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (
-        isMobileMenuOpen &&
-        !target?.closest(".mobile-menu-container")
-      ) {
+      if (isMobileMenuOpen && !target?.closest(".mobile-menu-container")) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -138,30 +135,32 @@ const Navbar = () => {
   // Logout function
   const handleLogout = () => {
     // Clear localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userData');
-    
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userData");
+
     // Clear cookies
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    document.cookie = 'userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    document.cookie = 'userData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "userData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
     // Update state
     setIsAuthenticated(false);
     setUserData(null);
     setIsProfileDropdownOpen(false);
     setIsMobileMenuOpen(false);
-    
+
     // Redirect to login
-    router.push('/home');
+    router.push("/home");
   };
 
   // Get user initials for avatar
   const getUserInitials = (): string => {
-    if (!userData?.name) return 'U'; // Default to 'U' for User
-    
-    const nameParts = userData.name.split(' ');
+    if (!userData?.name) return "U"; // Default to 'U' for User
+
+    const nameParts = userData.name.split(" ");
     if (nameParts.length >= 2) {
       return (nameParts[0].charAt(0) + nameParts[1].charAt(0)).toUpperCase();
     }
@@ -169,24 +168,26 @@ const Navbar = () => {
   };
 
   // Menu items configuration (only show authenticated routes when logged in)
-  const menuItems = isAuthenticated ? [
-    { href: "/home", label: "Home" },
-    { href: "/daftar-ormas", label: "Daftar Ormas" },
-    { href: "/list-ormas", label: "List Ormas" },
-    {
-      href: "https://drive.google.com/file/d/1uBWkWaqiGBw032Ur-9XPuzRsVYbMSQhV/view?usp=sharing",
-      label: "Panduan",
-    },
-    { href: "/faq", label: "FAQ" },
-  ] : [
-    { href: "/home", label: "Home" },
-    { href: "/list-ormas", label: "List Ormas" },
-    {
-      href: "https://drive.google.com/file/d/1uBWkWaqiGBw032Ur-9XPuzRsVYbMSQhV/view?usp=sharing",
-      label: "Panduan",
-    },
-    { href: "/faq", label: "FAQ" },
-  ];
+  const menuItems = isAuthenticated
+    ? [
+        { href: "/home", label: "Home" },
+        { href: "/daftar-ormas", label: "Daftar Ormas" },
+        { href: "/list-ormas", label: "List Ormas" },
+        {
+          href: "https://drive.google.com/file/d/1i7dQanDsmAlsgSicTktbBmGQHk3Krveq/view?usp=drive_link",
+          label: "Panduan",
+        },
+        { href: "/faq", label: "FAQ" },
+      ]
+    : [
+        { href: "/home", label: "Home" },
+        { href: "/list-ormas", label: "List Ormas" },
+        {
+          href: "https://drive.google.com/file/d/1i7dQanDsmAlsgSicTktbBmGQHk3Krveq/view?usp=drive_link",
+          label: "Panduan",
+        },
+        { href: "/faq", label: "FAQ" },
+      ];
 
   return (
     <>
@@ -249,8 +250,8 @@ const Navbar = () => {
                 key={index}
                 href={item.href}
                 className="text-white hover:text-gray-200 transition-colors duration-300"
-                target={item.href.startsWith('http') ? '_blank' : '_self'}
-                rel={item.href.startsWith('http') ? 'noopener noreferrer' : ''}
+                target={item.href.startsWith("http") ? "_blank" : "_self"}
+                rel={item.href.startsWith("http") ? "noopener noreferrer" : ""}
               >
                 {item.label}
               </Link>
@@ -299,11 +300,13 @@ const Navbar = () => {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-gray-900 truncate">
-                          {userData?.name || 'User'}
+                          {userData?.name || "User"}
                         </p>
                         <div className="flex items-center space-x-2">
                           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                          <span className="text-xs text-gray-500">Status: Aktif</span>
+                          <span className="text-xs text-gray-500">
+                            Status: Aktif
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -316,7 +319,7 @@ const Navbar = () => {
                       className="flex items-center px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-all duration-200 group"
                       onClick={() => setIsProfileDropdownOpen(false)}
                     >
-                      <FaRegUser className="w-5 h-5 mr-3 text-gray-400 group-hover:text-green-500 transition-colors duration-200"/>
+                      <FaRegUser className="w-5 h-5 mr-3 text-gray-400 group-hover:text-green-500 transition-colors duration-200" />
                       <span className="font-medium">Profile Saya</span>
                     </Link>
 
@@ -324,7 +327,7 @@ const Navbar = () => {
                       className="w-full flex items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
                       onClick={handleLogout}
                     >
-                      <MdLogout className="w-5 h-5 mr-3 text-gray-400 group-hover:text-red-500 transition-colors duration-200"/>
+                      <MdLogout className="w-5 h-5 mr-3 text-gray-400 group-hover:text-red-500 transition-colors duration-200" />
                       <span className="font-medium">Keluar Akun</span>
                     </button>
                   </div>
@@ -375,7 +378,9 @@ const Navbar = () => {
         {isClient && (
           <div
             className={`lg:hidden mobile-menu-container overflow-hidden transition-all duration-500 ease-in-out ${
-              isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+              isMobileMenuOpen
+                ? "max-h-screen opacity-100"
+                : "max-h-0 opacity-0"
             }`}
           >
             <div className="bg-green-600 rounded-b-2xl shadow-lg mt-3 pb-4 px-3 sm:px-4 space-y-2">
@@ -400,8 +405,10 @@ const Navbar = () => {
                       isScrolled ? "text-sm" : "text-base"
                     }`}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    target={item.href.startsWith('http') ? '_blank' : '_self'}
-                    rel={item.href.startsWith('http') ? 'noopener noreferrer' : ''}
+                    target={item.href.startsWith("http") ? "_blank" : "_self"}
+                    rel={
+                      item.href.startsWith("http") ? "noopener noreferrer" : ""
+                    }
                   >
                     {item.label}
                   </Link>
@@ -431,7 +438,7 @@ const Navbar = () => {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-gray-900 truncate">
-                          {userData?.name || 'User'}
+                          {userData?.name || "User"}
                         </p>
                         <div className="flex items-center space-x-2">
                           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse flex-shrink-0"></div>
@@ -449,15 +456,17 @@ const Navbar = () => {
                         className="flex items-center p-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition-all duration-200 w-full"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <FaRegUser className="w-4 h-4 mr-3 flex-shrink-0"/>
-                        <span className="font-medium text-sm">Profile Saya</span>
+                        <FaRegUser className="w-4 h-4 mr-3 flex-shrink-0" />
+                        <span className="font-medium text-sm">
+                          Profile Saya
+                        </span>
                       </Link>
 
                       <button
                         className="w-full flex items-center p-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200"
                         onClick={handleLogout}
                       >
-                        <MdLogout className="w-4 h-4 mr-3 flex-shrink-0"/>
+                        <MdLogout className="w-4 h-4 mr-3 flex-shrink-0" />
                         <span className="font-medium text-sm">Keluar Akun</span>
                       </button>
                     </div>
